@@ -1,4 +1,3 @@
-# git pull
 import numpy as np
 import matplotlib.pyplot as plt
 # f(x) = x^2 + 5*np.sin(x)
