@@ -18,9 +18,9 @@ def updatePoint(x, eta, iter):
     return X, i
 
 def main():
-    x_line = np.linspace(-6, 6, 50)
-    y_line = f(x_line)
-    plt.plot(x_line, y_line)
+    x_axis = np.linspace(-6, 6, 50)
+    y_axis = f(x_axis)
+    plt.plot(x_axis, y_axis)
 
     X, iter = updatePoint(6, 0.05, 100)
 
