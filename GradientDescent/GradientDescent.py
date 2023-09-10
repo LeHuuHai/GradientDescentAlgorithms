@@ -1,35 +1,42 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# f(x) = x^2 + 5*np.sin(x)
 
-def f(x):
-    return x**2 + 5*np.sin(x)
-def grad(x):
-    eps = 1e-6
-    return (f(x+eps)-f(x-eps))/(2*eps)
+# data
+X = np.random.rand(1000, 1)
+y = 4 + 3 * X + .2*np.random.randn(1000, 1)
+one = np.ones((X.shape[0], 1))
+Xbar = np.concatenate((one,X), axis = 1)
 
-def updatePoint(x, eta, iter):
-    X = []
+def predict(w):
+    return Xbar.dot(w)
+def grad(w):
+    n = Xbar.shape[0]
+    return 1/n * Xbar.T.dot(Xbar.dot(w) - y)
+
+def loss_function(w):
+    n = Xbar.shape[0]
+    return 0.5/n * np.linalg.norm(Xbar.dot(w) - y)**2
+
+def train(w, eta, iter):
+    loss = []
+    it = 0
     for i in range(iter):
-        x -= eta*grad(x)
-        X.append(x)
-        if abs(grad(x)) < 1e-6:
+        it = i
+        loss.append(loss_function(w))
+        w -= eta*grad(w)
+        if np.linalg.norm(grad(w))/len(w) < 1e-2 :
             break
-    return X, i
+    return w, loss, it
 
 def main():
-    x_axis = np.linspace(-6, 6, 50)
-    y_axis = f(x_axis)
-    plt.plot(x_axis, y_axis)
-
-    X, iter = updatePoint(6, 0.05, 100)
-
-    X = np.array(X)
-    Y = f(X)
-    plt.scatter(X, Y)
-
-    print("iter: ", iter)
+    w = np.array([2., 2.])
+    w = np.reshape(w, (2,1))
+    w, loss, iter = train(w, 0.01, 1000)
+    print("weight:", w)
+    print("iter", iter)
+    print("loss:", loss)
+    loss_x_axis = [i for i in range(len(loss))]
+    plt.plot(loss_x_axis, loss)
     plt.show()
-
 
 main()
